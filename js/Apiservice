@@ -1,0 +1,103 @@
+/**
+ * Class untuk menangani koneksi dan request ke API
+ * Menggunakan Fetch API dengan async/await
+ */
+export class ApiService {
+    constructor() {
+        // Coba salah satu API key ini:
+        // Jika yang satu limit, ganti ke yang lain (misal: '4a3b711b')
+        this.apiKey = '35cd5eee'; 
+        
+        // PERBAIKAN DISINI:
+        // 1. Menggunakan HTTPS (agar tidak diblokir browser modern)
+        // 2. Menghapus parameter '?i=...' agar tidak bentrok saat pencarian
+        this.baseUrl = 'https://www.omdbapi.com/tt3896198&apikey=35cd5eee'; 
+    }
+
+    /**
+     * Mencari film berdasarkan query
+     * @param {string} query - Kata kunci pencarian
+     * @returns {Promise<Array>} - Array film
+     */
+    async searchMovies(query) {
+        try {
+            // Karena baseUrl sudah bersih, tanda '?' disini sekarang berfungsi benar
+            const url = `${this.baseUrl}?apikey=${this.apiKey}&s=${encodeURIComponent(query)}&type=movie`;
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.Response === 'False') {
+                throw new Error(data.Error || 'Film tidak ditemukan');
+            }
+            
+            return data.Search;
+        } catch (error) {
+            console.error('Error searching movies:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Mendapatkan detail film berdasarkan ID
+     * @param {string} id - ID film dari OMDb
+     * @returns {Promise<Object>} - Detail film
+     */
+    async getMovieDetails(id) {
+        try {
+            const url = `${this.baseUrl}?apikey=${this.apiKey}&i=${id}&plot=full`;
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.Response === 'False') {
+                throw new Error(data.Error || 'Detail film tidak ditemukan');
+            }
+            
+            return data;
+        } catch (error) {
+            console.error('Error getting movie details:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Mencari film berdasarkan halaman (untuk pagination)
+     * @param {string} query - Kata kunci pencarian
+     * @param {number} page - Nomor halaman
+     * @returns {Promise<Object>} - Data film dengan total hasil
+     */
+    async searchMoviesWithPage(query, page = 1) {
+        try {
+            const url = `${this.baseUrl}?apikey=${this.apiKey}&s=${encodeURIComponent(query)}&page=${page}&type=movie`;
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.Response === 'False') {
+                throw new Error(data.Error || 'Film tidak ditemukan');
+            }
+            
+            return {
+                movies: data.Search,
+                totalResults: parseInt(data.totalResults),
+                currentPage: page
+            };
+        } catch (error) {
+            console.error('Error searching movies with page:', error);
+            throw error;
+        }
+    }
+}
