@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 CineSearch - Pencarian Film Interaktif</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-film"></i>
+                <h1>CineSearch</h1>
+                <span class="tagline">Cari & Temukan Film Favoritmu</span>
+            </div>
+            <div class="theme-toggle">
+                <button id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar untuk riwayat pencarian -->
+            <aside class="sidebar">
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-history"></i> Riwayat Pencarian</h3>
+                    <ul id="searchHistory"></ul>
+                    <button id="clearHistory" class="btn-secondary">
+                        <i class="fas fa-trash"></i> Hapus Riwayat
+                    </button>
+                </div>
+                
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-info-circle"></i> Info</h3>
+                    <p>Cari film dengan memasukkan judul di kolom pencarian. Aplikasi menggunakan data real-time dari OMDb API.</p>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-value" id="totalSearches">0</span>
+                            <span class="stat-label">Total Pencarian</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Area Konten Utama -->
+            <div class="content-area">
+                <!-- Search Box -->
+                <div class="search-section">
+                    <div class="search-box">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search"></i>
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                placeholder="Cari film (contoh: Avengers, Inception, Titanic)..."
+                                autocomplete="off"
+                            >
+                        </div>
+                        <button id="searchButton" class="btn-primary">
+                            <i class="fas fa-search"></i> Cari
+                        </button>
+                    </div>
+                    <div class="search-tips">
+                        <p><i class="fas fa-lightbulb"></i> Tips: Tekan Enter untuk mencari, atau klik judul di riwayat untuk pencarian ulang</p>
+                    </div>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div id="loadingIndicator" class="loading-container hidden">
+                    <div class="spinner"></div>
+                    <p>Mengambil data film...</p>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorContainer" class="error-container hidden">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3 id="errorTitle">Terjadi Kesalahan</h3>
+                    <p id="errorMessage">Tidak dapat mengambil data film. Silakan coba lagi.</p>
+                    <button id="retryButton" class="btn-secondary">Coba Lagi</button>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section">
+                    <div class="results-header">
+                        <h2 id="resultsTitle">Film Populer</h2>
+                        <div class="results-count">
+                            <span id="resultsCount">0</span> film ditemukan
+                        </div>
+                    </div>
+                    
+                    <!-- Grid untuk film -->
+                    <div id="moviesGrid" class="movies-grid">
+                        <!-- Film akan ditampilkan di sini secara dinamis -->
+                    </div>
+
+                    <!-- No Results Message -->
+                    <div id="noResults" class="no-results hidden">
+                        <i class="fas fa-film"></i>
+                        <h3>Tidak Ada Film Ditemukan</h3>
+                        <p>Coba dengan kata kunci yang berbeda</p>
+                    </div>
+                </div>
+
+                <!-- Movie Details Modal -->
+                <div id="movieModal" class="modal hidden">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 id="modalTitle">Detail Film</h2>
+                            <button id="closeModal" class="close-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="modalBody">
+                            <!-- Detail film akan ditampilkan di sini -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2026 CineSearch | UAS Pengembangan Aplikasi Web | Dibuat dengan <i class="fas fa-heart"></i> dan OMDb API</p>
+            <p class="api-info">Data film disediakan oleh <a href="https://www.omdbapi.com/" target="_blank">OMDb API</a></p>
+        </footer>
+    </div>
+
+    <!-- JavaScript Modules -->
+    <script type="module" src="js/ApiService.js"></script>
+    <script type="module" src="js/UIManager.js"></script>
+    <script type="module" src="js/StorageManager.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

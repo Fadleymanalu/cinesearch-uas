@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test API Response</title>
+    <script type="module">
+        // Test function untuk melihat response API
+        async function testApi() {
+            const apiKey = '4a3b711b'; // API key gratis
+            const query = 'guardians';
+            const url = `https://www.omdbapi.com/?apikey=${apiKey}&s=${query}`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log('Search Results:', data);
+                
+                // Jika ada hasil, ambil detail film pertama
+                if (data.Search && data.Search.length > 0) {
+                    const movieId = data.Search[0].imdbID;
+                    const detailUrl = `https://www.omdbapi.com/?apikey=${apiKey}&i=${movieId}&plot=full`;
+                    const detailResponse = await fetch(detailUrl);
+                    const detailData = await detailResponse.json();
+                    console.log('Movie Details:', detailData);
+                    
+                    // Tampilkan di halaman
+                    document.getElementById('result').innerHTML = `
+                        <h2>${detailData.Title} (${detailData.Year})</h2>
+                        <img src="${detailData.Poster}" alt="${detailData.Title}">
+                        <p><strong>Plot:</strong> ${detailData.Plot}</p>
+                        <p><strong>Director:</strong> ${detailData.Director}</p>
+                        <p><strong>Actors:</strong> ${detailData.Actors}</p>
+                        <p><strong>IMDb Rating:</strong> ${detailData.imdbRating}</p>
+                    `;
+                }
+            } catch (error) {
+                console.error('API Error:', error);
+            }
+        }
+        
+        // Jalankan test saat halaman load
+        window.onload = testApi;
+    </script>
+</head>
+<body>
+    <h1>Testing OMDb API Response</h1>
+    <div id="result">Loading...</div>
+</body>
+</html>
